@@ -9,9 +9,10 @@ jobs:
   galpy-tests:
     name: galpy on ${{ matrix.os }}, python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    matrix:
-      os: ["ubuntu-latest"]
-      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    strategy:
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
@@ -26,9 +27,10 @@ jobs:
   gala-tests:
     name: gala on ${{ matrix.os }}, python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    matrix:
-      os: ["ubuntu-latest"]
-      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    strategy:
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
@@ -43,9 +45,10 @@ jobs:
   agama-tests:
     name: agama on ${{ matrix.os }}, python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    matrix:
-      os: ["ubuntu-latest"]
-      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    strategy:
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
