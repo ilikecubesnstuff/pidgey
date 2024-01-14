@@ -15,14 +15,13 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
-          environment-file: tests/galpy_env.yml
           python-version: ${{ matrix.python-version }}
       - run: |
+          $CONDA/bin/conda install -c conda-forge gsl galpy astropy pytest
           pip install .
-          pytest tests/test_galpy.py
+          pytest tests/test_galpy
 
   gala-tests:
     name: gala on ${{ matrix.os }}, python ${{ matrix.python-version }}
@@ -33,12 +32,11 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
-          environment-file: tests/gala_env.yml
           python-version: ${{ matrix.python-version }}
       - run: |
+          $CONDA/bin/conda install -c conda-forge gala astropy pytest
           pip install .
           pytest tests/test_gala.py
 
@@ -55,12 +53,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
+          $CONDA/bin/conda install -c conda-forge numpy astropy pytest
           cd ../
           git clone https://github.com/GalacticDynamics-Oxford/Agama.git
           cd Agama
-          pip install numpy
           pip install --user --use-pep517 --config-settings="--global-option=--assume-yes" .
           cd ../pidgey
           pip install .
-          pip install pytest
           pytest tests/test_agama.py
