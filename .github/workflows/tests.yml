@@ -1,0 +1,63 @@
+name: Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  galpy-tests:
+    name: galpy on ${{ matrix.os }}, python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    matrix:
+      os: ["ubuntu-latest"]
+      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          environment-file: test/galpy_env.yml
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          pip install .
+          pytest tests/test_galpy.py
+
+  gala-tests:
+    name: gala on ${{ matrix.os }}, python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    matrix:
+      os: ["ubuntu-latest"]
+      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          environment-file: test/gala_env.yml
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          pip install .
+          pytest tests/test_gala.py
+
+  agama-tests:
+    name: agama on ${{ matrix.os }}, python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    matrix:
+      os: ["ubuntu-latest"]
+      python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          pip install .
+          git clone https://github.com/GalacticDynamics-Oxford/Agama.git
+          cd Agama
+          pip install --user --use-pep517 --config-settings="--global-option=--assume-yes" .
+          cd ../
+          pip install pytest
+          pytest tests/test_agama.py

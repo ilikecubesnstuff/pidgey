@@ -4,7 +4,8 @@ import gala
 import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
-from pydgin.gala_backend import GalaBackend
+
+from pidgey.gala_backend import GalaBackend
 
 
 @pytest.fixture

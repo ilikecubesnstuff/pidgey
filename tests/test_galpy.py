@@ -4,7 +4,8 @@ import galpy
 import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
-from pydgin.galpy_backend import GalpyBackend
+
+from pidgey.galpy_backend import GalpyBackend
 
 
 @pytest.fixture

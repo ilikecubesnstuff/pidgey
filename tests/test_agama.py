@@ -4,7 +4,8 @@ import astropy.units as u
 import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
-from pydgin.agama_backend import AgamaBackend
+
+from pidgey.agama_backend import AgamaBackend
 
 
 @pytest.fixture
