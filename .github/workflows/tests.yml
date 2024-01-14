@@ -55,10 +55,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          python -m pip install --upgrade pip
           python -m pip install numpy astropy pytest
           git clone https://github.com/GalacticDynamics-Oxford/Agama.git ../Agama
-          python -m pip install --user --use-pep517 ../Agama
-          cd ../pidgey
+          python ../Agama/setup.py install --user
           python -m pip install .
           python -m pytest tests/test_agama.py
