@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
 
-from pidgey.gala_backend import GalaBackend
+from pidgey import GalaBackend, get_backend_from
 
 
 @pytest.fixture
@@ -18,6 +18,11 @@ def potential():
     return gala.potential.NFWPotential.from_circular_velocity(
         v_c=200 * u.km / u.s, r_s=10.0 * u.kpc, units=gala.units.galactic
     )
+
+
+def test_detection(potential):
+    backend = get_backend_from(potential)
+    assert isinstance(backend, GalaBackend)
 
 
 def test_single_orbit(potential, backend):

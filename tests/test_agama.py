@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
 
-from pidgey.agama_backend import AgamaBackend
+from pidgey import AgamaBackend, get_backend_from
 
 
 @pytest.fixture
@@ -19,6 +19,11 @@ def potential():
     bulge_par = dict(type="Sersic", mass=1, scaleRadius=1, axisRatioZ=0.6)
     halo_par = dict(type="NFW", mass=70, scaleRadius=20, axisRatioZ=0.8)
     return agama.Potential(disk_par, bulge_par, halo_par)
+
+
+def test_detection(potential):
+    backend = get_backend_from(potential)
+    assert isinstance(backend, AgamaBackend)
 
 
 def test_single_orbit(potential, backend):

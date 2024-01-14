@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
 
-from pidgey.galpy_backend import GalpyBackend
+from pidgey import GalpyBackend, get_backend_from
 
 
 @pytest.fixture
@@ -16,6 +16,11 @@ def backend():
 @pytest.fixture
 def potential():
     return galpy.potential.MWPotential2014
+
+
+def test_detection(potential):
+    backend = get_backend_from(potential)
+    assert isinstance(backend, GalpyBackend)
 
 
 def test_single_orbit(potential, backend):
