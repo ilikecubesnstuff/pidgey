@@ -18,7 +18,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          environment-file: test/galpy_env.yml
+          environment-file: tests/galpy_env.yml
           python-version: ${{ matrix.python-version }}
       - run: |
           pip install .
@@ -36,7 +36,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          environment-file: test/gala_env.yml
+          environment-file: tests/gala_env.yml
           python-version: ${{ matrix.python-version }}
       - run: |
           pip install .
@@ -55,10 +55,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          pip install .
+          cd ../
           git clone https://github.com/GalacticDynamics-Oxford/Agama.git
           cd Agama
+          pip install numpy
           pip install --user --use-pep517 --config-settings="--global-option=--assume-yes" .
-          cd ../
+          cd ../pidgey
+          pip install .
           pip install pytest
           pytest tests/test_agama.py
