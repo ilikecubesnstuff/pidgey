@@ -12,7 +12,7 @@ class AgamaBackend(Backend):
     def ORBIT_TYPE(self):
         return tuple
 
-    def _compute_orbit(self, skycoord, dt, steps, pot):
+    def _compute_orbit(self, skycoord, pot, dt, steps):
         pos = [getattr(skycoord, attr).to(u.kpc).value for attr in ("x", "y", "z")]
         vel = [
             getattr(skycoord, attr).to(u.km / u.s).value
@@ -25,7 +25,7 @@ class AgamaBackend(Backend):
         return orbit
 
     def _extract_points(self, orbit):
-        skycoord, dt, steps, pot = self._args
+        skycoord, pot, dt, steps = self._args
         if not skycoord.shape:
             orbit = [orbit]
         xs = []

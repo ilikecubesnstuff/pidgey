@@ -18,10 +18,10 @@ class Backend(ExtendImports):
         pass
 
     @abstractmethod
-    def _compute_orbit(self, skycoord, timespan, dt, pot):
+    def _compute_orbit(self, skycoord, pot, dt, steps):
         pass
 
-    def compute_orbit(self, skycoord, dt, steps, pot):
+    def compute_orbit(self, skycoord, pot, dt, steps):
         if not isinstance(skycoord, coord.SkyCoord):
             raise TypeError(
                 "coord must be passed in as a astropy.coordinates.SkyCoord object."
@@ -41,8 +41,8 @@ class Backend(ExtendImports):
                 "dt must be passed in as a astropy.units.Quantity object."
                 f"{dt} is not a astropy.coordinates.SkyCoord object."
             )
-        self._args = skycoord, dt, steps, pot
-        self._result = self._compute_orbit(skycoord, dt, steps, pot)
+        self._args = skycoord, pot, dt, steps
+        self._result = self._compute_orbit(skycoord, pot, dt, steps)
         return self._extract_points(self._result)
 
     @abstractmethod

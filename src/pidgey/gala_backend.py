@@ -8,7 +8,7 @@ class GalaBackend(Backend):
     def ORBIT_TYPE(self):
         return self.dynamics.orbit.Orbit
 
-    def _compute_orbit(self, skycoord, dt, steps, pot):
+    def _compute_orbit(self, skycoord, pot, dt, steps):
         pos = [skycoord.x.value, skycoord.y.value, skycoord.z.value] * skycoord.x.unit
         vel = [
             skycoord.v_x.value,

@@ -39,7 +39,7 @@ def test_single_orbit(potential, backend):
         z_sun=15.0 * u.pc,
         galcen_v_sun=CartesianDifferential([10.0, 235.0, 7.0] * u.km / u.s),
     )
-    orbit = backend.compute_orbit(c, 0.1 * u.Gyr, STEPS, potential)
+    orbit = backend.compute_orbit(c, potential, dt=0.1 * u.Gyr, steps=STEPS)
     assert isinstance(orbit, coord.representation.CartesianRepresentation)
     assert len(orbit) == STEPS
 
@@ -65,7 +65,7 @@ def test_multiple_orbits(potential, backend):
         representation_type="cartesian",
     )
 
-    orbit = backend.compute_orbit(c, 0.1 * u.Gyr, STEPS, potential)
+    orbit = backend.compute_orbit(c, potential, dt=0.1 * u.Gyr, steps=STEPS)
     assert isinstance(orbit, coord.representation.CartesianRepresentation)
     assert len(orbit) == ORBITS
     assert len(orbit[0]) == STEPS

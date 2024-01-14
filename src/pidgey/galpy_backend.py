@@ -11,14 +11,14 @@ class GalpyBackend(Backend):
     def ORBIT_TYPE(self):
         return self.orbit.Orbit
 
-    def _compute_orbit(self, skycoord, dt, steps, pot):
+    def _compute_orbit(self, skycoord, pot, dt, steps):
         orbit = self.orbit.Orbit(skycoord)
         t = np.arange(steps) * dt
         orbit.integrate(t, pot)
         return orbit
 
     def _extract_points(self, orbit):
-        skycoord, dt, steps, pot = self._args
+        skycoord, pot, dt, steps = self._args
         t = np.arange(steps) * dt
         return coord.representation.CartesianRepresentation(
             orbit.x(t), orbit.y(t), orbit.z(t)
