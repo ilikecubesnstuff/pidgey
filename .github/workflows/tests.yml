@@ -22,7 +22,7 @@ jobs:
           $CONDA/bin/conda install -c conda-forge gsl galpy astropy pytest
           $CONDA/bin/python -m pip install --upgrade pip
           $CONDA/bin/python -m pip install .
-          $CONDA/bin/python -m pytest tests/test_galpy
+          $CONDA/bin/python -m pytest tests/test_galpy.py
 
   gala-tests:
     name: gala on ${{ matrix.os }}, python ${{ matrix.python-version }}
@@ -55,12 +55,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          $CONDA/bin/conda install -c conda-forge numpy astropy pytest
-          $CONDA/bin/python -m pip install --upgrade pip
-          cd ../
-          git clone https://github.com/GalacticDynamics-Oxford/Agama.git
-          cd Agama
-          $CONDA/bin/python -m pip install --user --use-pep517 --config-settings="--global-option=--assume-yes" .
+          python -m pip install --upgrade pip
+          python -m pip install numpy astropy pytest
+          git clone https://github.com/GalacticDynamics-Oxford/Agama.git ../Agama
+          python -m pip install --user --use-pep517 ../Agama
           cd ../pidgey
-          $CONDA/bin/python -m pip install .
-          $CONDA/bin/python -m pytest tests/test_agama.py
+          python -m pip install .
+          python -m pytest tests/test_agama.py
