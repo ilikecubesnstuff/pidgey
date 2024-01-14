@@ -9,7 +9,7 @@ from .galpy_backend import GalpyBackend
 def get_backend_from(obj):
     if isinstance(obj, _Sequence) and len(obj) > 0:
         obj = obj[0]
-    module = _inspect.getmodule(obj)
+    module = _inspect.getmodule(obj) or _inspect.getmodule(type(obj))
     if module is None:
         return None
 
