@@ -1,9 +1,9 @@
 [project]
 name = "pidgey"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python interface for dynamics in galaxies, using Agama, Gala, and Galpy as backends."
 authors = [
-    {name = "ilikecubesnstuff", email = "25328250+ilikecubesnstuff@users.noreply.github.com"},
+    { name = "ilikecubesnstuff", email = "25328250+ilikecubesnstuff@users.noreply.github.com" },
 ]
 dependencies = [
     "iext>=1.0.0",
@@ -12,12 +12,20 @@ dependencies = [
 ]
 requires-python = ">=3.9"
 readme = "README.md"
-license = {text = "MIT"}
+
+[project.license]
+text = "MIT"
 
 [build-system]
-requires = ["pdm-backend"]
+requires = [
+    "pdm-backend",
+]
 build-backend = "pdm.backend"
-
 
 [tool.pdm]
 package-type = "library"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=7.4.4",
+]

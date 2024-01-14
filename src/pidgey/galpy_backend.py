@@ -1,74 +1,25 @@
-import typing
-from typing import Iterable
-
-import astropy.units as u
+import astropy.coordinates as coord
 import numpy as np
 
 from .base import Backend
-from .coordinates import Coordinate, Cylindrical
-from .utils import make_quantity
 
 
 class GalpyBackend(Backend):
     def __imports__():
-        import galpy.orbit
+        from galpy import orbit
 
-    @staticmethod
-    def format_coordinate(coord: Coordinate):
-        # assume coord is of len/size 1
-        # print(coord)
-        if isinstance(coord, Cylindrical):
-            return [
-                coord.R[0],
-                coord.vR[0],
-                coord.vT[0],
-                coord.z[0],
-                coord.vz[0],
-                coord.phi[0],
-            ]
-        raise NotImplementedError(
-            "Only cylindrical coordinates accepted for galpy backend"
-        )
+    def ORBIT_TYPE(self):
+        return self.orbit.Orbit
 
-    def _extract_points_from_orbit(
-        self, orbit: typing.Any, *, t: u.Quantity, phi_offset: u.Quantity
-    ):
-        R = orbit.R(t)
-        phi = orbit.phi(t) + phi_offset.to(u.dimensionless_unscaled)
-
-        x = R * np.cos(phi.value)
-        y = R * np.sin(phi.value)
-        z = orbit.z(t)
-
-        return np.array([x, y, z]).T
-
-    def _compute_orbit(
-        self, coord: Coordinate, *, t: u.Quantity, pot: typing.Any, **kwargs
-    ):
-        initial_condition = self.format_coordinate(coord)
-        orbit = self.galpy.orbit.Orbit(initial_condition)
-        orbit.integrate(t, pot, **kwargs)
+    def _compute_orbit(self, skycoord, dt, steps, pot):
+        orbit = self.orbit.Orbit(skycoord)
+        t = np.arange(steps) * dt
+        orbit.integrate(t, pot)
         return orbit
 
-    def _compute_orbits(
-        self, coords: Iterable[Coordinate], *, t: u.Quantity, pot: typing.Any, **kwargs
-    ):
-        initial_conditions = list(map(self.format_coordinate, coords))
-        orbits = self.galpy.orbit.Orbit(initial_conditions)
-        orbits.integrate(t, pot, **kwargs)
-        return orbits
-
-    def _precompute_namespace_hook(self, namespace: typing.MutableMapping):
-        pot = namespace["pot"]
-        dt = make_quantity(namespace["dt"], u.Gyr)
-        steps = namespace["steps"]
-        omega = make_quantity(namespace["pattern_speed"], u.km / u.s / u.kpc)
-
-        if isinstance(steps, typing.Collection):
-            steps = steps[-1]
+    def _extract_points(self, orbit):
+        skycoord, dt, steps, pot = self._args
         t = np.arange(steps) * dt
-        phi_offset = t * omega
-
-        computing_kwargs = dict(t=t, pot=pot, progressbar=False)
-        extracting_kwargs = dict(t=t, phi_offset=phi_offset)
-        return computing_kwargs, extracting_kwargs
+        return coord.representation.CartesianRepresentation(
+            orbit.x(t), orbit.y(t), orbit.z(t)
+        )
