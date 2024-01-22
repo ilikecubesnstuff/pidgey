@@ -1,6 +1,6 @@
 [project]
 name = "pidgey"
-version = "0.2.2"
+version = "0.2.3"
 description = "Python interface for the dynamics of galaxies. Uses agama, gala, and galpy as backends."
 authors = [
     { name = "ilikecubesnstuff", email = "25328250+ilikecubesnstuff@users.noreply.github.com" },
