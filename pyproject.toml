@@ -1,14 +1,14 @@
 [project]
 name = "pidgey"
-version = "0.2.3"
+version = "0.2.4"
 description = "Python interface for the dynamics of galaxies. Uses agama, gala, and galpy as backends."
 authors = [
     { name = "ilikecubesnstuff", email = "25328250+ilikecubesnstuff@users.noreply.github.com" },
 ]
 dependencies = [
-    "iext>=1.0.0",
-    "numpy>=1.21",
-    "astropy>=5.0",
+    "iext>=1",
+    "numpy>=1.22",
+    "astropy>=5,<6",
 ]
 classifiers = [
     "Intended Audience :: Science/Research",
