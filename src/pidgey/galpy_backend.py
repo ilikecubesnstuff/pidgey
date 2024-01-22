@@ -8,7 +8,7 @@ from .base import Backend
 class GalpyBackend(Backend):
     def __imports__():
         from galpy import orbit
-        from galpy.util.conversion import get_physical
+        from galpy.util import conversion
 
     def ORBIT_TYPE(self):
         return self.orbit.Orbit
@@ -17,7 +17,7 @@ class GalpyBackend(Backend):
         self, skycoord, pot, dt, steps, pattern_speed=0 * u.km / u.s / u.kpc
     ):
         # unit consistency issues... look into this later
-        pot_units = self.get_physical(pot)
+        pot_units = self.conversion.get_physical(pot)
         orbit = self.orbit.Orbit(skycoord, **pot_units)
 
         t = np.arange(steps) * dt
