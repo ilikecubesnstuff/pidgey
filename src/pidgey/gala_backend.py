@@ -21,13 +21,7 @@ class GalaBackend(Backend):
         ] * skycoord.v_x.unit
         ics = self.dynamics.PhaseSpacePosition(pos, vel)
 
-        frame = self.potential.ConstantRotatingFrame(
-            Omega=[0, 0, pattern_speed.value] * pattern_speed.unit,
-            units=self.units.galactic,
-        )
-        orbit = self.potential.Hamiltonian(pot, frame=frame).integrate_orbit(
-            ics, dt=dt, n_steps=steps - 1
-        )
+        orbit = pot.integrate_orbit(ics, dt=dt, n_steps=steps - 1)
         return orbit
 
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
