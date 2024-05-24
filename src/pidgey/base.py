@@ -1,4 +1,4 @@
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 
 import astropy.coordinates as coord
 import astropy.units as u
@@ -13,7 +13,8 @@ class Backend(ExtendImports):
         self._args = None
         self._result = None
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def ORBIT_TYPE(self):
         pass
 
@@ -46,7 +47,7 @@ class Backend(ExtendImports):
                 f"{dt} is not a astropy.coordinates.SkyCoord object."
             )
         self._args = skycoord, pot, dt, steps
-        self._result = self._compute_orbit(skycoord, pot, dt, steps)
+        self._result = self._compute_orbit(skycoord, pot, dt, steps, pattern_speed)
         return self._extract_points(self._result, pattern_speed)
 
     @abstractmethod

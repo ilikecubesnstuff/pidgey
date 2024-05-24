@@ -9,6 +9,8 @@ class AgamaBackend(Backend):
     def __imports__():
         import agama
 
+        agama.setUnits(mass=1, length=1, velocity=1)
+
     def ORBIT_TYPE(self):
         return tuple
 
@@ -22,7 +24,11 @@ class AgamaBackend(Backend):
         ]
         posvel = np.array([*pos, *vel]).T
         orbit = self.agama.orbit(
-            potential=pot, ic=posvel, time=(dt * steps).to(u.Gyr).value, trajsize=steps
+            potential=pot,
+            ic=posvel,
+            time=(dt * steps).to(u.Gyr).value,
+            trajsize=steps,
+            Omega=pattern_speed.to(u.km / u.s / u.kpc).value,
         )
         return orbit
 
