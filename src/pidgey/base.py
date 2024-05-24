@@ -1,4 +1,4 @@
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 
 import astropy.coordinates as coord
 import astropy.units as u
@@ -13,7 +13,8 @@ class Backend(ExtendImports):
         self._args = None
         self._result = None
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def ORBIT_TYPE(self):
         pass
 
