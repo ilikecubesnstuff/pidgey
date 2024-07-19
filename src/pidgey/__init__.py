@@ -1,3 +1,13 @@
+"""Python interface for dynamics in galaxies, supporting multiple backends."""
+
+__all__ = [
+    "get_backend_from",
+    # Backends
+    "AgamaBackend",
+    "GalaBackend",
+    "GalpyBackend",
+]
+
 import inspect as _inspect
 from collections.abc import Sequence as _Sequence
 
