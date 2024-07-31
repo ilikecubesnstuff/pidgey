@@ -17,7 +17,7 @@ def backend():
 def potential():
     disk_par = dict(type="Disk", mass=5, scaleRadius=3, scaleHeight=0.4)
     bulge_par = dict(type="Sersic", mass=1, scaleRadius=1, axisRatioZ=0.6)
-    halo_par = dict(type="NFW", mass=70, scaleRadius=20, axisRatioZ=0.8)
+    halo_par = dict(type="NFW", mass=70, scaleRadius=20)
     return agama.Potential(disk_par, bulge_par, halo_par)
 
 
