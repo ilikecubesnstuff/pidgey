@@ -15,7 +15,13 @@ class AgamaBackend(Backend):
         return tuple
 
     def _compute_orbit(
-        self, skycoord, pot, dt, steps, pattern_speed=0 * u.km / u.s / u.kpc
+        self,
+        skycoord,
+        pot,
+        dt,
+        steps,
+        pattern_speed=0 * u.km / u.s / u.kpc,
+        **integration_kwargs,
     ):
         pos = [getattr(skycoord, attr).to(u.kpc).value for attr in ("x", "y", "z")]
         vel = [
@@ -29,6 +35,7 @@ class AgamaBackend(Backend):
             time=(dt * steps).to(u.Gyr).value,
             trajsize=steps,
             Omega=pattern_speed.to(u.km / u.s / u.kpc).value,
+            **integration_kwargs,
         )
         return orbit
 

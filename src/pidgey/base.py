@@ -20,12 +20,24 @@ class Backend(ExtendImports):
 
     @abstractmethod
     def _compute_orbit(
-        self, skycoord, pot, dt, steps, pattern_speed=0 * u.km / u.s / u.kpc
+        self,
+        skycoord,
+        pot,
+        dt,
+        steps,
+        pattern_speed=0 * u.km / u.s / u.kpc,
+        **integration_kwargs,
     ):
         pass
 
     def compute_orbit(
-        self, skycoord, pot, dt, steps, pattern_speed=0 * u.km / u.s / u.kpc
+        self,
+        skycoord,
+        pot,
+        dt,
+        steps,
+        pattern_speed=0 * u.km / u.s / u.kpc,
+        **integration_kwargs,
     ):
         if not isinstance(skycoord, coord.SkyCoord):
             raise TypeError(
@@ -47,7 +59,9 @@ class Backend(ExtendImports):
                 f"{dt} is not a astropy.coordinates.SkyCoord object."
             )
         self._args = skycoord, pot, dt, steps
-        self._result = self._compute_orbit(skycoord, pot, dt, steps, pattern_speed)
+        self._result = self._compute_orbit(
+            skycoord, pot, dt, steps, pattern_speed, **integration_kwargs
+        )
         return self._extract_points(self._result, pattern_speed)
 
     @abstractmethod
