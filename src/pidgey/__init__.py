@@ -17,6 +17,15 @@ from .galpy_backend import GalpyBackend
 
 
 def get_backend_from(obj):
+    """
+    Get the backend associated with an object's module of origin.
+
+    Args:
+        obj (object): An object whose module is used to determine the appropriate backend.
+
+    Returns:
+        Backend: The backend associated with the object's module.
+    """
     if isinstance(obj, _Sequence) and len(obj) > 0:
         obj = obj[0]
     module = _inspect.getmodule(obj) or _inspect.getmodule(type(obj))

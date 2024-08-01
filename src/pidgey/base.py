@@ -6,6 +6,18 @@ from iext import ExtendImports
 
 
 class Backend(ExtendImports):
+    """
+    Base class for orbit integration backends.
+
+    This class defines the interface for orbit integration through
+    two methods: `compute_orbit` and `get_points`. Two abstract
+    methods, `_compute_orbit` and `_extract_points`, and an abstract
+    attribute, `ORBIT_TYPE`, must be implemented to define a new backend.
+
+    Attributes:
+        ORBIT_TYPE (type): The type of the orbit object returned by the backend.
+    """
+
     def __imports__():
         ...
 
@@ -16,6 +28,9 @@ class Backend(ExtendImports):
     @property
     @abstractmethod
     def ORBIT_TYPE(self):
+        """
+        The type of the orbit object returned by the backend.
+        """
         pass
 
     @abstractmethod
@@ -39,6 +54,21 @@ class Backend(ExtendImports):
         pattern_speed=0 * u.km / u.s / u.kpc,
         **integration_kwargs,
     ):
+        """
+        Compute an orbit for a given initial condition (through a SkyCoord object),
+        through a given potential.
+
+        Args:
+            skycoord (astropy.coordinates.SkyCoord): The initial conditions of the orbit.
+            pot (object): The potential to compute the orbit in.
+            dt (astropy.units.Quantity): The time step for the integration.
+            steps (int): The number of steps to integrate over.
+            pattern_speed (astropy.units.Quantity): The pattern speed of the potential.
+            **integration_kwargs: Additional arguments for integration routines.
+
+        Returns:
+            astropy.coordinates.SkyCoord: The points from the orbit integration.
+        """
         if not isinstance(skycoord, coord.SkyCoord):
             raise TypeError(
                 "coord must be passed in as a astropy.coordinates.SkyCoord object."
@@ -69,6 +99,12 @@ class Backend(ExtendImports):
         pass
 
     def get_points(self):
+        """
+        Get the points from the orbit integration result in a SkyCoord object.
+
+        Returns:
+            astropy.coordinates.SkyCoord: The points from the orbit integration.
+        """
         if not isinstance(self._result, self.ORBIT_TYPE):
             raise TypeError("No computed orbit to retrive points from.")
         return self._extract_points(self._result)
