@@ -98,13 +98,16 @@ class Backend(ExtendImports):
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
         pass
 
-    def get_points(self):
+    def get_points(self, pattern_speed=0 * u.km / u.s / u.kpc):
         """
         Get the points from the orbit integration result in a SkyCoord object.
+
+        Args:
+            pattern_speed (astropy.units.Quantity): The pattern speed of the potential.
 
         Returns:
             astropy.coordinates.SkyCoord: The points from the orbit integration.
         """
         if not isinstance(self._result, self.ORBIT_TYPE):
             raise TypeError("No computed orbit to retrive points from.")
-        return self._extract_points(self._result)
+        return self._extract_points(self._result, pattern_speed)
