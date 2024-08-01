@@ -1,9 +1,10 @@
 import astropy.coordinates as coord
 import astropy.units as u
-import gala
 import numpy as np
 import pytest
 from astropy.coordinates import CartesianDifferential
+from gala import potential as gp
+from gala import units as gu
 
 from pidgey import GalaBackend, get_backend_from
 
@@ -15,8 +16,8 @@ def backend():
 
 @pytest.fixture
 def potential():
-    return gala.potential.NFWPotential.from_circular_velocity(
-        v_c=200 * u.km / u.s, r_s=10.0 * u.kpc, units=gala.units.galactic
+    return gp.NFWPotential.from_circular_velocity(
+        v_c=200 * u.km / u.s, r_s=10.0 * u.kpc, units=gu.galactic
     )
 
 
