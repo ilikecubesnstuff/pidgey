@@ -10,6 +10,7 @@ class GalpyBackend(Backend):
         from galpy import orbit
         from galpy.util import conversion
 
+    @property
     def ORBIT_TYPE(self):
         return self.orbit.Orbit
 

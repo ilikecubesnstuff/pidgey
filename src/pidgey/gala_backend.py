@@ -7,6 +7,7 @@ class GalaBackend(Backend):
     def __imports__():
         from gala import dynamics, potential, units
 
+    @property
     def ORBIT_TYPE(self):
         return self.dynamics.orbit.Orbit
 

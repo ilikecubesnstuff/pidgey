@@ -11,8 +11,9 @@ class AgamaBackend(Backend):
 
         agama.setUnits(mass=1, length=1, velocity=1)
 
+    @property
     def ORBIT_TYPE(self):
-        return tuple
+        return np.ndarray
 
     def _compute_orbit(
         self,
