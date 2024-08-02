@@ -42,6 +42,57 @@ def test_single_orbit(potential, backend):
     orbit = backend.compute_orbit(c, potential, dt=0.1 * u.Gyr, steps=STEPS)
     assert isinstance(orbit, coord.representation.CartesianRepresentation)
     assert len(orbit) == STEPS
+    orbit = backend.get_points()
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == STEPS
+
+
+def test_single_orbit_with_alternate_integrator(potential, backend):
+    STEPS = 50
+    c = coord.SkyCoord(
+        ra=20.0 * u.deg,
+        dec=30.0 * u.deg,
+        distance=2.0 * u.kpc,
+        pm_ra_cosdec=-10.0 * u.mas / u.yr,
+        pm_dec=20.0 * u.mas / u.yr,
+        radial_velocity=50.0 * u.km / u.s,
+        galcen_distance=8.0 * u.kpc,
+        z_sun=15.0 * u.pc,
+        galcen_v_sun=CartesianDifferential([10.0, 235.0, 7.0] * u.km / u.s),
+    )
+    orbit = backend.compute_orbit(
+        c, potential, dt=0.1 * u.Gyr, steps=STEPS, method="hermite"
+    )
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == STEPS
+    orbit = backend.get_points()
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == STEPS
+
+
+def test_single_orbit_with_pattern_speed(potential, backend):
+    # NOTE: potential is not rotating, only tests that the pattern speed is accepted by the backend
+    STEPS = 50
+    c = coord.SkyCoord(
+        ra=20.0 * u.deg,
+        dec=30.0 * u.deg,
+        distance=2.0 * u.kpc,
+        pm_ra_cosdec=-10.0 * u.mas / u.yr,
+        pm_dec=20.0 * u.mas / u.yr,
+        radial_velocity=50.0 * u.km / u.s,
+        galcen_distance=8.0 * u.kpc,
+        z_sun=15.0 * u.pc,
+        galcen_v_sun=CartesianDifferential([10.0, 235.0, 7.0] * u.km / u.s),
+    )
+    pattern_speed = 40 * u.km / u.s / u.kpc
+    orbit = backend.compute_orbit(
+        c, potential, dt=0.1 * u.Gyr, steps=STEPS, pattern_speed=pattern_speed
+    )
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == STEPS
+    orbit = backend.get_points()
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == STEPS
 
 
 def test_multiple_orbits(potential, backend):
@@ -66,6 +117,10 @@ def test_multiple_orbits(potential, backend):
     )
 
     orbit = backend.compute_orbit(c, potential, dt=0.1 * u.Gyr, steps=STEPS)
+    assert isinstance(orbit, coord.representation.CartesianRepresentation)
+    assert len(orbit) == ORBITS
+    assert len(orbit[0]) == STEPS
+    orbit = backend.get_points()
     assert isinstance(orbit, coord.representation.CartesianRepresentation)
     assert len(orbit) == ORBITS
     assert len(orbit[0]) == STEPS

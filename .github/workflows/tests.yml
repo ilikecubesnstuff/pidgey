@@ -36,8 +36,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: |
-          $CONDA/bin/conda install -c conda-forge gala astropy pytest
+      - run: |  # gala appears to throw errors with astropy v6
+          $CONDA/bin/conda install -c conda-forge gala "astropy<6" pytest
           $CONDA/bin/python -m pip install --upgrade pip
           $CONDA/bin/python -m pip install .
           $CONDA/bin/python -m pytest tests/test_gala.py
