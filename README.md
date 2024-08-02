@@ -19,6 +19,7 @@ This is currently used in the [commensurability](https://github.com/ilikecubesns
     - [With `agama`](#with-agama)
     - [With `gala`](#with-gala)
     - [With `galpy`](#with-galpy)
+- [Defining New Backends](#defining-new-backends)
 
 ## Installation
 
@@ -142,4 +143,39 @@ ic = c.SkyCoord(
     representation_type="cartesian",
 )
 orbit = calculate_orbit(ic, potential)
+```
+
+
+## Defining New Backends
+
+To define a new backend, you must subclass `pidgey.base.Backend` and define two methods and one property.
+
+```py
+import astropy.coordinates as coord
+from pidgey.base import Backend
+
+class CustomBackend(Backend):
+
+    @property
+    def ORBIT_TYPE(self):
+        # return the type of the object that stores relevant orbit information
+        return CustomOrbitType
+
+    def _compute_orbit(
+        self,
+        skycoord,  # initial condition, stored in SkyCoord object
+        pot,  # potential defined by backend's package
+        dt,  # time step
+        steps,  # number of integration steps
+        pattern_speed=0 * u.km / u.s / u.kpc,
+        **integration_kwargs,  # any additional arguments for orbit integration
+    ):
+        # call your custom orbit integration routine
+        # return the custom object that stores the relevant orbit information
+        return CustomOrbit
+
+    def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
+        # extract the points in configuration space into a SkyCoord object
+        # pattern speed provided in case it is required to extract points correctly
+        return coord.representation.CartesianRepresentation(x, y, z)
 ```
