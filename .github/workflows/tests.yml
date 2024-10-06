@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          $CONDA/bin/conda install -c conda-forge gsl galpy astropy pytest
+          $CONDA/bin/conda install -c conda-forge python=${{ matrix.python-version }} gsl galpy astropy pytest
           $CONDA/bin/python -m pip install --upgrade pip
           $CONDA/bin/python -m pip install .
           $CONDA/bin/python -m pytest tests/test_galpy.py
@@ -37,7 +37,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |  # gala appears to throw errors with astropy v6
-          $CONDA/bin/conda install -c conda-forge gala "astropy<6" pytest
+          $CONDA/bin/conda install -c conda-forge python=${{ matrix.python-version }} gala "astropy<6" pytest
           $CONDA/bin/python -m pip install --upgrade pip
           $CONDA/bin/python -m pip install .
           $CONDA/bin/python -m pytest tests/test_gala.py
@@ -54,10 +54,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: |
+      - run: |  # using Agama commit 0c5993d in particular - later versions are not supported yet
           python -m pip install numpy astropy pytest
           git clone https://github.com/GalacticDynamics-Oxford/Agama.git ../Agama
           cd ../Agama
+          git checkout 0c5993d
           python setup.py install --user --assume-yes
           cd ../pidgey
           python -m pip install .
