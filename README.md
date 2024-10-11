@@ -29,6 +29,18 @@ Install this package via `pip`:
 python -m pip install pidgey
 ```
 
+**To use `pidgey`, you require one of the following galactic dynamics libraries installed.**
+| Package | Installation Instructions |
+| ------- | ------------------------- |
+| [`agama`](https://github.com/GalacticDynamics-Oxford/Agama)* | https://github.com/GalacticDynamics-Oxford/Agama/blob/master/INSTALL |
+| [`gala`](https://github.com/adrn/gala)                       | https://gala.adrian.pw/en/latest/install.html |
+| [`galpy`](https://github.com/jobovy/galpy)                   | https://docs.galpy.org/en/stable/installation.html |
+
+***Note**: Currently, `pidgey` supports [this version of `agama`](https://github.com/GalacticDynamics-Oxford/Agama/tree/0c5993d1c631d9a9e8f48213f919e09bfd629639) (commit hash [0c5993d](https://github.com/GalacticDynamics-Oxford/Agama/tree/0c5993d1c631d9a9e8f48213f919e09bfd629639)).
+`agama` requires WSL on Windows, as well as a C++ compiler.
+After you clone the repository, you may require running an explicit `python setup.py install --user` - this installation pattern is only supported for Python versions <=3.11.
+
+
 ## Usage
 
 Get the points from an orbit integration stored in an `astropy.coordinates.SkyCoord` object by calling the `compute_orbit` method of a backend. The backend can generally be obtained from the potential used for the orbit integration with the `get_backend_from` function.
