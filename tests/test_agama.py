@@ -96,7 +96,8 @@ def test_single_orbit_with_pattern_speed(potential, backend):
     assert len(orbit) == STEPS
 
 
-def test_multiple_orbits(potential, backend):
+@pytest.mark.parametrize("orbits", [1, 10])
+def test_multiple_orbits(potential, backend, orbits):
     ORBITS = 10
     STEPS = 50
 
