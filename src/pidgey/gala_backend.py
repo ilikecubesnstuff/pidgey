@@ -43,6 +43,13 @@ class GalaBackend(Backend):
             dt=dt,
             n_steps=steps - 1,
         )
+
+        # In the case of a single element collection of initial conditions,
+        # the orbit is returned as a 1D array. We need to reshape it to the
+        # expected shape.
+        expected_shape = (steps, *skycoord.shape)
+        if orbit.shape != expected_shape:
+            orbit = orbit.reshape(expected_shape)
         return orbit
 
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
