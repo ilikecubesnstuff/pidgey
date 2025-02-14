@@ -1,4 +1,6 @@
+import astropy.coordinates as coord
 import astropy.units as u
+import numpy as np
 
 from .base import Backend
 
@@ -53,9 +55,13 @@ class GalaBackend(Backend):
         return orbit
 
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
-        frame = self.potential.ConstantRotatingFrame(
+        frame = self.potential.frame.builtin.ConstantRotatingFrame(
             Omega=[0, 0, pattern_speed.value] * pattern_speed.unit,
             units=self.units.galactic,
         )
-        orbit = orbit.to_frame(frame)
+        static_frame = self.potential.frame.builtin.ConstantRotatingFrame(
+            Omega=[0, 0, 0] * pattern_speed.unit,
+            units=self.units.galactic,
+        )
+        orbit = orbit.to_frame(frame, current_frame=static_frame)
         return orbit.data.T
