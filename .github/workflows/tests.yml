@@ -38,7 +38,7 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
@@ -48,7 +48,7 @@ jobs:
       - shell: bash -el {0}
         run: |
           conda activate test
-          conda install -c conda-forge gala astropy pytest
+          conda install -c conda-forge gsl gala=1.9.1 astropy pytest
           python -m pip install --upgrade pip
           python -m pip install .
           python -m pytest tests/test_gala.py
