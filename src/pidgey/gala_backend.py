@@ -55,13 +55,25 @@ class GalaBackend(Backend):
         return orbit
 
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
-        frame = self.potential.frame.builtin.ConstantRotatingFrame(
-            Omega=[0, 0, pattern_speed.value] * pattern_speed.unit,
-            units=self.units.galactic,
+        skycoord, pot, dt, steps = self._args
+        _, *shape = orbit.shape
+
+        t = np.arange(steps) * dt
+        t = (
+            np.array([t for _ in range(int(np.prod(shape)))]).reshape(orbit.shape)
+            * dt.unit
         )
-        static_frame = self.potential.frame.builtin.ConstantRotatingFrame(
-            Omega=[0, 0, 0] * pattern_speed.unit,
-            units=self.units.galactic,
-        )
-        orbit = orbit.to_frame(frame, current_frame=static_frame)
-        return orbit.data.T
+        phi_offset = t * pattern_speed
+
+        orbit = orbit.represent_as(coord.CylindricalRepresentation)
+        rho = orbit.data.rho
+        phi = orbit.data.phi + phi_offset.to(u.dimensionless_unscaled)
+
+        x = rho * np.cos(phi.value)
+        y = rho * np.sin(phi.value)
+        z = orbit.data.z
+
+        x = np.moveaxis(x, 0, -1)
+        y = np.moveaxis(y, 0, -1)
+        z = np.moveaxis(z, 0, -1)
+        return coord.representation.CartesianRepresentation(x, y, z)
