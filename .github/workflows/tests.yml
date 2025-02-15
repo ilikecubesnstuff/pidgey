@@ -62,13 +62,10 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-      - shell: bash -el {0}
-        run: |  # using Agama commit 0c5993d in particular - later versions are not supported yet
-          conda activate test
+      - run: |  # using Agama commit 0c5993d in particular - later versions are not supported yet
           python -m pip install numpy astropy pytest
           git clone https://github.com/GalacticDynamics-Oxford/Agama.git ../Agama
           cd ../Agama
