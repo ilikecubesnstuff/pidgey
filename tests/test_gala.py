@@ -105,7 +105,7 @@ def test_single_orbit_with_pattern_speed(potential, backend):
 
 @pytest.mark.parametrize("orbits", [1, 10])
 def test_multiple_orbits(potential, backend, orbits):
-    ORBITS = 10
+    ORBITS = orbits
     STEPS = 50
 
     xs = np.ones(ORBITS) * u.kpc
@@ -126,7 +126,6 @@ def test_multiple_orbits(potential, backend, orbits):
     )
 
     orbit = backend.compute_orbit(c, potential, dt=0.1 * u.Gyr, steps=STEPS)
-    print(orbit.T)
     assert isinstance(orbit, coord.representation.CartesianRepresentation)
     assert len(orbit) == ORBITS
     assert len(orbit[0]) == STEPS
