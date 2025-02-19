@@ -89,10 +89,12 @@ class Backend(ExtendImports):
                 f"{dt} is not a astropy.coordinates.SkyCoord object."
             )
         self._args = skycoord, pot, dt, steps
-        self._result = self._compute_orbit(
-            skycoord, pot, dt, steps, pattern_speed, **integration_kwargs
-        )
-        return self._extract_points(self._result, pattern_speed)
+
+        with u.add_enabled_equivalencies(u.dimensionless_angles()):
+            self._result = self._compute_orbit(
+                skycoord, pot, dt, steps, pattern_speed, **integration_kwargs
+            )
+            return self._extract_points(self._result, pattern_speed)
 
     @abstractmethod
     def _extract_points(self, orbit, pattern_speed=0 * u.km / u.s / u.kpc):
@@ -110,4 +112,6 @@ class Backend(ExtendImports):
         """
         if not isinstance(self._result, self.ORBIT_TYPE):
             raise TypeError("No computed orbit to retrive points from.")
-        return self._extract_points(self._result, pattern_speed)
+
+        with u.add_enabled_equivalencies(u.dimensionless_angles()):
+            return self._extract_points(self._result, pattern_speed)

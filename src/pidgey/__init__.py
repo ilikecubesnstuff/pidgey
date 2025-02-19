@@ -11,14 +11,9 @@ __all__ = [
 import inspect as _inspect
 from collections.abc import Sequence as _Sequence
 
-import astropy.units as u
-
 from .agama_backend import AgamaBackend
 from .gala_backend import GalaBackend
 from .galpy_backend import GalpyBackend
-
-# enable dimensionless angles for unit conversions in backends
-u.add_enabled_equivalencies(u.dimensionless_angles())
 
 
 def get_backend_from(obj):
