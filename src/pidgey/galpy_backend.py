@@ -23,9 +23,24 @@ class GalpyBackend(Backend):
         pattern_speed=0 * u.km / u.s / u.kpc,
         **integration_kwargs,
     ):
-        # unit consistency issues... look into this later
-        pot_units = self.conversion.get_physical(pot)
-        orbit = self.orbit.Orbit(skycoord, **pot_units)
+        rovo = self.conversion.get_physical(pot)
+        ro = rovo["ro"]
+        vo = rovo["vo"]
+        z_sun = skycoord.z_sun
+        skycoord = coord.SkyCoord(
+            x=skycoord.galactocentric.x,
+            y=skycoord.galactocentric.y,
+            z=skycoord.galactocentric.z,
+            v_x=skycoord.galactocentric.v_x,
+            v_y=skycoord.galactocentric.v_y,
+            v_z=skycoord.galactocentric.v_z,
+            frame="galactocentric",
+            representation_type="cartesian",
+            galcen_distance=np.sqrt(ro**2 * u.kpc**2 + z_sun**2),
+            galcen_v_sun=[vo, 0.0, 0.0] * u.km / u.s,
+            z_sun=z_sun,
+        )
+        orbit = self.orbit.Orbit(skycoord, **rovo)
 
         t = np.arange(steps) * dt
         orbit.integrate(t, pot, **integration_kwargs)
